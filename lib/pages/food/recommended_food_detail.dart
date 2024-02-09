@@ -134,7 +134,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                   ),
                   child: Icon(
                     Icons.favorite,
-                    color: AppColors.mainColor,
+                    color: AppColors.mainColor, 
                   ),
                 ),
 
