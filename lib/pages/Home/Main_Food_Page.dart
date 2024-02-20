@@ -40,7 +40,7 @@ class _MainFoodPageState extends State<MainFoodPage> {
                           size: 15.0,
                           color: Colors.black54,
                         ),
-                        Icon(Icons.arrow_drop_down_rounded),
+                        const Icon(Icons.arrow_drop_down_rounded),
                       ],
                     ),
                   ],
@@ -49,15 +49,15 @@ class _MainFoodPageState extends State<MainFoodPage> {
                   child: Container(
                     width: Dimensions.width45,
                     height: Dimensions.height45,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Dimensions.radious20),
+                        color: AppColors.mainColor),
                     child: Icon(
                       // Flutter default size is 24.
                       Icons.search,
                       size: Dimensions.iconsSize24,
                       color: Colors.white,
                     ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(Dimensions.radious20),
-                        color: AppColors.mainColor),
                   ),
                 ),
               ],
