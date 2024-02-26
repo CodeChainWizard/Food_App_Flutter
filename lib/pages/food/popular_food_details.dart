@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/data/controllers/popular_product_controller.dart';
+import 'package:food_delivery/pages/Home/Main_Food_Page.dart';
 import 'package:food_delivery/utils/colors.dart';
 import 'package:food_delivery/widgets/app_column.dart';
+import 'package:food_delivery/widgets/app_constarins.dart';
 import 'package:food_delivery/widgets/app_icons.dart';
 import 'package:food_delivery/widgets/big_text.dart';
 import 'package:food_delivery/widgets/dimension.dart';
 import 'package:food_delivery/widgets/expendable_text_widget.dart';
+import 'package:get/get.dart';
 
 class PopularFoodDetail extends StatelessWidget {
-  const PopularFoodDetail({super.key});
+  int pageId;
+  PopularFoodDetail({required this.pageId, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var product = Get.find<PopularProductController>().popularProductList[pageId];
+    // print("Page id is:="+pageId.toString());
+    // print("Product name is:="+product.name.toString());
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -24,7 +32,8 @@ class PopularFoodDetail extends StatelessWidget {
                 height: Dimensions.popularFoodImgSize,
                 decoration: BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("assets/image/food3.jpg"),
+                        // image: AssetImage("assets/image/food3.jpg"),
+                        image: NetworkImage(AppConstrains.BASE_URL+AppConstrains.UPLOAD_URL+product.img!),
                         fit: BoxFit.cover)),
               )),
 
@@ -33,11 +42,16 @@ class PopularFoodDetail extends StatelessWidget {
               top: Dimensions.height45,
               left: Dimensions.width20,
               right: Dimensions.width20,
-              child: const Row(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  AppIcons(icon: Icons.arrow_back_ios),
-                  AppIcons(icon: Icons.shopping_cart_outlined),
+                  GestureDetector(
+                    onTap:(){
+                      Get.to(()=> const MainFoodPage());
+                    },
+                      child:
+                  const AppIcons(icon: Icons.arrow_back_ios)),
+                  const AppIcons(icon: Icons.shopping_cart_outlined),
                 ],
               )),
 
@@ -62,7 +76,7 @@ class PopularFoodDetail extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const AppColumn(text: "Farfalle Pasta"),
+                    AppColumn(text: product.name!),
                     SizedBox(
                       height: Dimensions.height20,
                     ),
@@ -70,11 +84,10 @@ class PopularFoodDetail extends StatelessWidget {
 
                     // Expendable text widget
                     SizedBox(height: Dimensions.height20,),
-                    const Expanded(
+                     Expanded(
                         child: SingleChildScrollView(
                             child: ExpendableTextWidget(
-                                text:
-                                    "Farfalle (Italian: [farˈfalle]) are a type of pasta commonly known as bow-tie pasta, ribbon pasta or butterfly pasta. The name is derived from the Italian word farfalle (butterflies).[1] In the Italian region of Emilia-Romagna, farfalle are known as strichetti (a local word for bow tie). A larger variation of farfalle is known as farfalloni, while the miniature version is called farfalline. Farfalle date back to the 16th century in the Lombardy and Emilia-Romagna regions of Northern Italy.[2],Farfalle (Italian: [farˈfalle]) are a type of pasta commonly known as bow-tie pasta, ribbon pasta or butterfly pasta. The name is derived from the Italian word farfalle (butterflies).[1] In the Italian region of Emilia-Romagna, farfalle are known as strichetti (a local word for bow tie). A larger variation of farfalle is known as farfalloni, while the miniature version is called farfalline. Farfalle date back to the 16th century in the Lombardy and Emilia-Romagna regions of Northern Italy.[2]"))),
+                                text: product.description!))),
                   ],
                 ),
               )),
@@ -134,13 +147,13 @@ class PopularFoodDetail extends StatelessWidget {
                   bottom: Dimensions.height10,
                   left: Dimensions.width_10,
                   right: Dimensions.width_10),
-              child: BigText(
-                text: "\$10 | Add to Cart",
-                color: Colors.white,
-              ),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(Dimensions.radious20),
                 color: AppColors.mainColor,
+              ),
+              child: BigText(
+                text: "\$ ${product.price!} "+"| Add to Cart",
+                color: Colors.white,
               ),
             ),
           ],

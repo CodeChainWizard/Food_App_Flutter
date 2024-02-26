@@ -4,6 +4,7 @@ import 'package:food_delivery/data/controllers/recommended_product_controller.da
 import 'package:food_delivery/pages/Home/Main_Food_Page.dart';
 import 'package:food_delivery/pages/food/popular_food_details.dart';
 import 'package:food_delivery/pages/food/recommended_food_detail.dart';
+import 'package:food_delivery/routes/route_helper.dart';
 import 'package:get/get.dart';
 import 'helper/dependinces.dart' as dep;
 
@@ -24,13 +25,12 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Food App',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MainFoodPage(),
+
+      home: MainFoodPage(),
       // home: const PopularFoodDetail(),
       // home: const RecommendedFoodDetail(),
+      initialRoute: RouteHelper.initial,
+      getPages: RouteHelper.routes,
     );
   }
 }

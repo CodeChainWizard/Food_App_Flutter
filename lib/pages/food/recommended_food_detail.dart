@@ -1,27 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/data/controllers/recommended_product_controller.dart';
+import 'package:food_delivery/routes/route_helper.dart';
 import 'package:food_delivery/utils/colors.dart';
+import 'package:food_delivery/widgets/app_constarins.dart';
 import 'package:food_delivery/widgets/app_icons.dart';
 import 'package:food_delivery/widgets/big_text.dart';
 import 'package:food_delivery/widgets/dimension.dart';
 import 'package:food_delivery/widgets/expendable_text_widget.dart';
-import 'package:food_delivery/widgets/small_text.dart';
+import 'package:get/get.dart';
 
 class RecommendedFoodDetail extends StatelessWidget {
-  const RecommendedFoodDetail({super.key});
+  var recommendedPageId;
+
+  RecommendedFoodDetail({required this.recommendedPageId, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var RecommendedPageId = Get.find<RecommendedProductController>()
+        .recommendedProductList[recommendedPageId];
+    // print("Recommended ID is:="+recommendedPageId.toString());
+    // print("RecommendedFood Name:="+RecommendedPageId.name.toString());
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            automaticallyImplyLeading: false,
             toolbarHeight: 70,
-            title: const Row(
+            title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                AppIcons(icon: Icons.clear),
-                AppIcons(icon: Icons.shopping_cart_outlined),
+                GestureDetector(
+                    onTap: () {
+                      Get.toNamed(RouteHelper.getInitial());
+                    },
+                    child: const AppIcons(icon: Icons.clear)),
+                const AppIcons(icon: Icons.shopping_cart_outlined),
               ],
             ),
             bottom: PreferredSize(
@@ -36,7 +51,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                         topRight: Radius.circular(Dimensions.radious20))),
                 child: Center(
                     child: BigText(
-                  text: "Farfalle Pasta",
+                  text: RecommendedPageId.name!,
                   size: Dimensions.font26,
                 )),
               ),
@@ -45,11 +60,18 @@ class RecommendedFoodDetail extends StatelessWidget {
             expandedHeight: 300,
             backgroundColor: AppColors.yellowColor,
             flexibleSpace: FlexibleSpaceBar(
-              background: Image.asset(
-                "assets/image/food3.jpg",
+              background: Image.network(
+                AppConstrains.BASE_URL +
+                    AppConstrains.UPLOAD_URL +
+                    RecommendedPageId.img!,
                 width: double.maxFinite,
                 fit: BoxFit.cover,
               ),
+              // background: Image.asset(
+              //   "assets/image/food3.jpg",
+              //   width: double.maxFinite,
+              //   fit: BoxFit.cover,
+              // ),
             ),
           ),
           SliverToBoxAdapter(
@@ -61,9 +83,8 @@ class RecommendedFoodDetail extends StatelessWidget {
                       left: Dimensions.width20,
                       right: Dimensions.width20,
                       bottom: Dimensions.height20),
-                  child: const ExpendableTextWidget(
-                    text:
-                        "Farfalle (Italian: [farˈfalle]) are a type of pasta commonly known as bow-tie pasta, ribbon pasta or butterfly pasta. The name is derived from the Italian word farfalle (butterflies).[1] In the Italian region of Emilia-Romagna, farfalle are known as strichetti (a local word for bow tie). A larger variation of farfalle is known as farfalloni, while the miniature version is called farfalline. Farfalle date back to the 16th century in the Lombardy and Emilia-Romagna regions of Northern Italy.[2],Farfalle (Italian: [farˈfalle]) are a type of pasta commonly known as bow-tie pasta, ribbon pasta or butterfly pasta. The name is derived from the Italian word farfalle (butterflies).[1] In the Italian region of Emilia-Romagna, farfalle are known as strichetti (a local word for bow tie). A larger variation of farfalle is known as farfalloni, while the miniature version is called farfalline. Farfalle date back to the 16th century in the Lombardy and Emilia-Romagna regions of Northern Italy.[2] Farfalle (Italian: [farˈfalle]) are a type of pasta commonly known as bow-tie pasta, ribbon pasta or butterfly pasta. The name is derived from the Italian word farfalle (butterflies).[1] In the Italian region of Emilia-Romagna, farfalle are known as strichetti (a local word for bow tie). A larger variation of farfalle is known as farfalloni, while the miniature version is called farfalline. Farfalle date back to the 16th century in the Lombardy and Emilia-Romagna regions of Northern Italy.[2],Farfalle (Italian: [farˈfalle]) are a type of pasta commonly known as bow-tie pasta, ribbon pasta or butterfly pasta. The name is derived from the Italian word farfalle (butterflies).[1] In the Italian region of Emilia-Romagna, ",
+                  child: ExpendableTextWidget(
+                    text: RecommendedPageId.description!,
                   ),
                 ),
               ],
@@ -79,8 +100,8 @@ class RecommendedFoodDetail extends StatelessWidget {
           // Create an first child to less and more button and counter(money).
           Container(
             padding: EdgeInsets.only(
-              left: Dimensions.width20*2.5,
-              right: Dimensions.width20*2.5,
+              left: Dimensions.width20 * 2.5,
+              right: Dimensions.width20 * 2.5,
               top: Dimensions.height10,
               bottom: Dimensions.height10,
             ),
@@ -93,7 +114,11 @@ class RecommendedFoodDetail extends StatelessWidget {
                   backgroundColor: AppColors.mainColor,
                   iconColor: Colors.white,
                 ),
-                BigText(text: "\$ 12.88" + " X " + " 0 ", color: Colors.black, size: Dimensions.font26,),
+                BigText(
+                  text: "\$ ${RecommendedPageId.price!} X  0 ",
+                  color: Colors.black,
+                  size: Dimensions.font26,
+                ),
                 AppIcons(
                   iconSize: Dimensions.iconsSize24,
                   icon: Icons.add,
@@ -132,9 +157,9 @@ class RecommendedFoodDetail extends StatelessWidget {
                     borderRadius: BorderRadius.circular(Dimensions.radious20),
                     color: Colors.white,
                   ),
-                  child: Icon(
+                  child: const Icon(
                     Icons.favorite,
-                    color: AppColors.mainColor, 
+                    color: AppColors.mainColor,
                   ),
                 ),
 
@@ -145,19 +170,18 @@ class RecommendedFoodDetail extends StatelessWidget {
                       bottom: Dimensions.height10,
                       left: Dimensions.width_10,
                       right: Dimensions.width_10),
-                  child: BigText(
-                    text: "\$10 | Add to Cart",
-                    color: Colors.white,
-                  ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(Dimensions.radious20),
                     color: AppColors.mainColor,
+                  ),
+                  child: BigText(
+                    text: "\$10  | Add to Cart",
+                    color: Colors.white,
                   ),
                 ),
               ],
             ),
           ),
-
         ],
       ),
     );
