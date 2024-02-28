@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:food_delivery/data/controllers/cart_controller.dart';
 import 'package:food_delivery/data/repository/popular_product_repo.dart';
 import 'package:food_delivery/models/products_model.dart';
 import 'package:get/get.dart';
@@ -8,10 +10,22 @@ class PopularProductController extends GetxController {
   PopularProductController({required this.popularProductRepo});
 
   List<dynamic> _popularProductList = [];
+
   List<dynamic> get popularProductList => _popularProductList;
 
   bool _isLoaded = false;
+
   bool get isLoaded => _isLoaded;
+
+  int _quantity = 0;
+
+  int get quantity => _quantity;
+
+  int _inCartItem = 0;
+
+  int get intCartItem => _inCartItem + _quantity;
+
+  late CartController _cart;
 
   Future<void> getPopularProductList() async {
     Response response = await popularProductRepo.getPopularProductList();
@@ -23,6 +37,52 @@ class PopularProductController extends GetxController {
       update();
     } else {
       print("not get...");
+    }
+  }
+
+  // Manage Quantity
+  void setQuantity(bool isIncrements) {
+    if (isIncrements) {
+      _quantity = checkQuantity(_quantity + 1);
+    } else {
+      _quantity = checkQuantity(_quantity - 1);
+    }
+    update();
+  }
+
+  int checkQuantity(int quantity) {
+    if (quantity < 0) {
+      Get.snackbar("Hey Buddy!!", "You can't reduce more!",
+          backgroundColor: Colors.white60, colorText: Colors.black);
+      return 0;
+    } else {
+      if (quantity > 25) {
+        Get.snackbar("Hey Buddy!!", "You Can't Increase more!",
+            backgroundColor: Colors.white60, colorText: Colors.black);
+        return 25;
+      } else {
+        return quantity;
+      }
+    }
+  }
+
+  void initProduct(CartController cart) {
+    _quantity = 0;
+    _inCartItem = 0;
+
+    _cart = cart;
+
+    // if exits
+    // get from storage inCartItems = 3
+  }
+
+  void addItem(ProductModel product) {
+    if (_quantity > 0) {
+      _cart.addItem(product, _quantity);
+    }else{
+      Get.snackbar("Hey Buddy!!",
+          "You Quantity is 0, so you can't add to cart this '${product.name}' product",
+          backgroundColor: Colors.white60, colorText: Colors.black);
     }
   }
 }

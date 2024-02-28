@@ -3,7 +3,11 @@
 A new Flutter project.
 
 ## Getting Started
+## Food Delivery app Architecture.
+![img.png](img.png)
 
+## Add to Cart Logic
+![img_1.png](img_1.png)
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
