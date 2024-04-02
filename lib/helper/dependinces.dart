@@ -7,8 +7,13 @@ import 'package:food_delivery/data/repository/popular_product_repo.dart';
 import 'package:food_delivery/data/repository/recommened_product_repo.dart';
 import 'package:food_delivery/widgets/app_constarins.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> init() async {
+
+  // store and get data using this variable(sharedPreferences).
+  final sharedPreferences = await SharedPreferences.getInstance();
+  Get.lazyPut(() => sharedPreferences);
   // Api Client
   Get.lazyPut(() => ApiClient(appBaseUrl: AppConstrains.BASE_URL));
 
